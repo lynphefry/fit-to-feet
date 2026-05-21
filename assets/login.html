@@ -81,7 +81,7 @@ Welcome Back To FEET TO FIT
 
 <div class="mb-3">
 
-<label class="mb-2">
+<label class="mb-2" for="userType">
 Login As
 </label>
 
@@ -141,7 +141,8 @@ required>
 <button
 type="button"
 class="btn btn-success"
-onclick="showPassword()">
+onclick="showPassword()"
+aria-label="Show password">
 
 <i class="fa fa-eye"></i>
 
@@ -157,9 +158,8 @@ onclick="showPassword()">
 
 <div>
 
-<input type="checkbox">
-
-Remember Me
+<input type="checkbox" id="rememberMe">
+<label for="rememberMe" class="ms-1">Remember Me</label>
 
 </div>
 
