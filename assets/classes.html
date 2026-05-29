@@ -104,8 +104,8 @@ balance, and mental relaxation.
 👨 Trainer: Sarah
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('Yoga')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'Yoga')">
 
 Book Class
 
@@ -142,8 +142,8 @@ strength training sessions.
 👨 Trainer: BENJI
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('Boxing')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'Boxing')">
 
 Book Class
 
@@ -180,8 +180,8 @@ and endurance workouts.
 👨 Trainer: Mercy
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('Cardio')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'Cardio')">
 
 Book Class
 
@@ -218,8 +218,8 @@ conditioning workouts.
 👨 Trainer: JOHN
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('CrossFit')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'CrossFit')">
 
 Book Class
 
@@ -256,8 +256,8 @@ for fun and calorie burning.
 👩 Trainer: AMELIA
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('Zumba')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'Zumba')">
 
 Book Class
 
@@ -294,8 +294,8 @@ overall body strength.
 👨 Trainer: ANDY
 </p>
 
-<button class="btn-yellow"
-onclick="bookClass('Strength Training')">
+<button class="btn-yellow book-btn"
+onclick="bookClass(this, 'Strength Training')">
 
 Book Class
 
@@ -304,14 +304,6 @@ Book Class
 </div>
 
 </div>
-
-</div>
-
-<!-- BOOKING MESSAGE -->
-
-<div class="text-center mt-5">
-
-<p id="bookingMessage"></p>
 
 </div>
 
@@ -371,24 +363,15 @@ WHY JOIN OUR CLASSES?
 
 <script>
 
-function bookClass(className){
-
-    const message =
-    document.getElementById("bookingMessage");
-
-    message.innerHTML =
-    "✅ You Successfully Booked " +
-    className + " Class";
-
-    message.style.color =
-    "#00c853";
-
-    message.style.fontWeight =
-    "bold";
-
-    message.style.fontSize =
-    "22px";
-
+function bookClass(button, className){
+    // Disable the button
+    button.disabled = true;
+    
+    // Change button text and style
+    button.innerHTML = "✓ Booked";
+    button.style.background = "#00c853";
+    button.style.cursor = "not-allowed";
+    button.style.opacity = "0.7";
 }
 
 </script>
