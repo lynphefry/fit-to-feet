@@ -34,6 +34,8 @@ href="style.css">
 
 <a href="contact.html">Contact</a>
 
+<span id="userInfo"></span>
+
 </nav>
 
 <!-- SHOP SECTION -->
@@ -44,7 +46,7 @@ href="style.css">
 GYM SHOP
 </h1>
 
-<div class="row">
+<div class="row" id="productsContainer">
 
 <!-- PRODUCT 1 -->
 
@@ -61,7 +63,7 @@ alt="female outfit">
 <p>Ksh 3,500</p>
 
 <button class="btn-yellow"
-onclick="addToCart('Gym Outfit For Female')">
+onclick="addToCart('Gym Outfit For Female', 3500)">
 
 Add To Cart
 
@@ -86,7 +88,7 @@ alt="male outfit">
 <p>Ksh 1,800</p>
 
 <button class="btn-yellow"
-onclick="addToCart('Gym Outfit For Men')">
+onclick="addToCart('Gym Outfit For Men', 1800)">
 
 Add To Cart
 
@@ -111,7 +113,7 @@ alt="yoga mat">
 <p>Ksh 2,000</p>
 
 <button class="btn-yellow"
-onclick="addToCart('Yoga Mat')">
+onclick="addToCart('Yoga Mat', 2000)">
 
 Add To Cart
 
@@ -130,6 +132,8 @@ Add To Cart
 <h2>Your Cart</h2>
 
 <ul id="cartList"></ul>
+
+<p id="cartTotal" style="font-weight: bold; font-size: 18px;"></p>
 
 <!-- CHECKOUT -->
 
@@ -159,40 +163,109 @@ class="mt-4 text-center"></p>
 
 <script>
 
-const cartList =
-document.getElementById("cartList");
+const API_URL = 'http://localhost:5000/api';
+const cartList = document.getElementById("cartList");
+let cart = [];
+let userId = localStorage.getItem('userId');
+
+// Load cart from backend
+async function loadCart() {
+  if (!userId) return;
+  
+  try {
+    const response = await fetch(`${API_URL}/cart/${userId}`);
+    cart = await response.json();
+    displayCart();
+  } catch (error) {
+    console.log('Using local cart:', error);
+  }
+}
+
+// Display cart items
+function displayCart() {
+  cartList.innerHTML = '';
+  let total = 0;
+  
+  cart.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${item.product} - Ksh ${item.price} <button onclick="removeFromCart(${index})">Remove</button>`;
+    cartList.appendChild(li);
+    total += item.price;
+  });
+  
+  document.getElementById('cartTotal').innerHTML = `Total: Ksh ${total}`;
+}
 
 /* ADD TO CART */
 
-function addToCart(product){
+async function addToCart(product, price) {
+  if (!userId) {
+    userId = 'guest-' + Date.now();
+    localStorage.setItem('userId', userId);
+  }
 
-    const li =
-    document.createElement("li");
+  try {
+    const response = await fetch(`${API_URL}/cart/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, product, price })
+    });
 
-    li.innerHTML =
-    product + " added to cart ✅";
+    const data = await response.json();
+    cart = data.cart || [...cart, { product, price }];
+    displayCart();
+  } catch (error) {
+    cart.push({ product, price });
+    displayCart();
+  }
+}
 
-    cartList.appendChild(li);
+/* REMOVE FROM CART */
 
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  displayCart();
 }
 
 /* CHECKOUT */
 
-function checkout(){
+async function checkout() {
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
 
-    document.getElementById("checkoutMessage")
-    .innerHTML =
-    "✅ Checkout Successful! Thank you for shopping.";
+  try {
+    const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    const response = await fetch(`${API_URL}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        items: cart,
+        totalPrice,
+        shippingAddress: 'Kenya'
+      })
+    });
 
-    document.getElementById("checkoutMessage")
-    .style.color = "#00c853";
+    const data = await response.json();
+    
+    document.getElementById("checkoutMessage").innerHTML =
+      "✅ Checkout Successful! Order ID: " + data.orderId;
 
-    document.getElementById("checkoutMessage")
-    .style.fontWeight = "bold";
+    document.getElementById("checkoutMessage").style.color = "#00c853";
+    document.getElementById("checkoutMessage").style.fontWeight = "bold";
+    document.getElementById("checkoutMessage").style.marginTop = "20px";
 
-    document.getElementById("checkoutMessage")
-    .style.marginTop = "20px";
-
+    cart = [];
+    displayCart();
+    
+    fetch(`${API_URL}/cart/${userId}`, { method: 'DELETE' });
+  } catch (error) {
+    console.log('Checkout error:', error);
+    alert('Checkout failed. Please try again.');
+  }
 }
 
 /* IP ADDRESS */
@@ -203,11 +276,12 @@ fetch("https://api.ipify.org?format=json")
 
 .then(data => {
 
-document.getElementById("ipAddress")
-.innerHTML =
-"Your IP Address: " + data.ip;
+document.getElementById("ipAddress").innerHTML = "Your IP Address: " + data.ip;
 
 });
+
+// Load cart on page load
+loadCart();
 
 </script>
 
