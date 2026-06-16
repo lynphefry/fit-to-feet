@@ -1,3 +1,42 @@
+<?php
+include_once 'db.php';
+
+$sent = false;
+$errors = [];
+$name = $email = $message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['contactName'] ?? '');
+    $email = trim($_POST['contactEmail'] ?? '');
+    $message = trim($_POST['contactMessage'] ?? '');
+
+    if ($name === '') {
+        $errors[] = 'Name is required.';
+    }
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'A valid email is required.';
+    }
+    if ($message === '') {
+        $errors[] = 'Message is required.';
+    }
+
+    if (empty($errors)) {
+        $stmt = mysqli_prepare($conn, "INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)");
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 'sss', $name, $email, $message);
+            if (mysqli_stmt_execute($stmt)) {
+                $sent = true;
+                $name = $email = $message = '';
+            } else {
+                $errors[] = 'Unable to send message right now.';
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            $errors[] = 'Database error: ' . mysqli_error($conn);
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +94,21 @@ CONTACT US
 
 <div class="col-lg-6">
 
-<form id="contactForm" class="card-box">
+<?php if ($sent): ?>
+    <div class="alert alert-success">✅ Message sent successfully.</div>
+<?php endif; ?>
+
+<?php if (!empty($errors)): ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($errors as $error): ?>
+                <li><?php echo htmlspecialchars($error); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<form method="post" action="contact.php" class="card-box">
 
 <!-- NAME -->
 
@@ -64,6 +117,8 @@ CONTACT US
 <label>Name</label>
 
 <input type="text"
+name="contactName"
+value="<?php echo htmlspecialchars($name); ?>"
 class="form-control"
 placeholder="Enter your name"
 required>
@@ -77,6 +132,8 @@ required>
 <label>Email</label>
 
 <input type="email"
+name="contactEmail"
+value="<?php echo htmlspecialchars($email); ?>"
 class="form-control"
 placeholder="Enter your email"
 required>
@@ -89,10 +146,10 @@ required>
 
 <label>Message</label>
 
-<textarea class="form-control"
+<textarea name="contactMessage" class="form-control"
 rows="5"
 placeholder="Write your message"
-required></textarea>
+required><?php echo htmlspecialchars($message); ?></textarea>
 
 </div>
 
@@ -102,10 +159,6 @@ required></textarea>
 Send Message
 </button>
 
-<!-- SUCCESS MESSAGE -->
-
-<p id="successMessage"></p>
-
 </form>
 
 </div>
@@ -113,34 +166,6 @@ Send Message
 </div>
 
 </div>
-
-<!-- SCRIPT -->
-
-<script>
-
-const form = document.getElementById("contactForm");
-
-const successMessage =
-document.getElementById("successMessage");
-
-form.addEventListener("submit", function(event){
-
-    event.preventDefault();
-
-    successMessage.innerHTML =
-    "✅ Message Sent Successfully!";
-
-    successMessage.style.color = "#00c853";
-
-    successMessage.style.marginTop = "20px";
-
-    successMessage.style.fontWeight = "bold";
-
-    form.reset();
-
-});
-
-</script>
 
 </body>
 

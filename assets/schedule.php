@@ -1,3 +1,13 @@
+<?php include_once 'db.php';
+
+$schedule = [];
+$result = mysqli_query($conn, "SELECT * FROM schedule ORDER BY id");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $schedule[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -107,133 +117,26 @@ Evening
 </thead>
 
 <tbody>
-
-<tr>
-
-<td class="fw-bold">Monday</td>
-
-<td>
-Yoga <br>
-<small>6:00 AM</small>
-</td>
-
-<td>
-Cardio <br>
-<small>1:00 PM</small>
-</td>
-
-<td>
-Gymnastics <br>
-<small>6:00 PM</small>
-</td>
-
-</tr>
-
-<tr>
-
-<td class="fw-bold">Tuesday</td>
-
-<td>
-Gymnastics <br>
-<small>7:00 AM</small>
-</td>
-
-<td>
-Zumba <br>
-<small>2:00 PM</small>
-</td>
-
-<td>
-Strength <br>
-<small>6:30 PM</small>
-</td>
-
-</tr>
-
-<tr>
-
-<td class="fw-bold">Wednesday</td>
-
-<td>
-Boxing <br>
-<small>6:30 AM</small>
-</td>
-
-<td>
-Yoga <br>
-<small>1:30 PM</small>
-</td>
-
-<td>
-Pilates <br>
-<small>5:30 PM</small>
-</td>
-
-</tr>
-
-<tr>
-
-<td class="fw-bold">Thursday</td>
-
-<td>
-Cardio <br>
-<small>7:00 AM</small>
-</td>
-
-<td>
-Gymnastics <br>
-<small>12:00 PM</small>
-</td>
-
-<td>
-Zumba <br>
-<small>6:00 PM</small>
-</td>
-
-</tr>
-
-<tr>
-
-<td class="fw-bold">Friday</td>
-
-<td>
-Strength <br>
-<small>6:00 AM</small>
-</td>
-
-<td>
-Yoga <br>
-<small>2:00 PM</small>
-</td>
-
-<td>
-gymnastics <br>
-<small>7:00 PM</small>
-</td>
-
-</tr>
-
-<tr>
-
-<td class="fw-bold">Saturday</td>
-
-<td>
-CrossFit <br>
-<small>8:00 AM</small>
-</td>
-
-<td>
-Boxing <br>
-<small>1:00 PM</small>
-</td>
-
-<td>
-Zumba <br>
-<small>5:00 PM</small>
-</td>
-
-</tr>
-
+<?php if (!empty($schedule)): ?>
+    <?php foreach ($schedule as $row): ?>
+        <tr>
+            <td class="fw-bold"><?= htmlspecialchars($row['day']) ?></td>
+            <td>
+                <?= nl2br(htmlspecialchars($row['morning'])) ?>
+            </td>
+            <td>
+                <?= nl2br(htmlspecialchars($row['afternoon'])) ?>
+            </td>
+            <td>
+                <?= nl2br(htmlspecialchars($row['evening'])) ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="4">No class schedule has been added yet.</td>
+    </tr>
+<?php endif; ?>
 </tbody>
 
 </table>

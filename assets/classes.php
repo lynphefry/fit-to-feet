@@ -1,3 +1,13 @@
+<?php include_once 'db.php';
+
+$classes = [];
+$result = mysqli_query($conn, "SELECT * FROM classes ORDER BY id");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $classes[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,6 +86,23 @@ Train with professionals and achieve your goals faster.
 <div class="container py-5">
 
 <div class="row g-4">
+<?php foreach ($classes as $class): ?>
+    <div class="col-lg-4 col-md-6">
+        <div class="card-box text-center h-100">
+            <img src="<?php echo htmlspecialchars($class['image']); ?>"
+                 class="trainer-img mb-3"
+                 alt="<?php echo htmlspecialchars($class['title']); ?>">
+            <i class="fas fa-dumbbell fa-3x text-success mb-3"></i>
+            <h3><?php echo htmlspecialchars($class['title']); ?></h3>
+            <p><?php echo nl2br(htmlspecialchars($class['description'])); ?></p>
+            <p>🕒 <?php echo htmlspecialchars($class['time_slot']); ?></p>
+            <p>👨 Trainer: <?php echo htmlspecialchars($class['trainer']); ?></p>
+            <button class="btn-yellow book-btn" onclick="bookClass('<?php echo addslashes($class['title']); ?>')">
+                Book Class
+            </button>
+        </div>
+    </div>
+<?php endforeach; ?>
 
 <!-- YOGA -->
 
@@ -105,7 +132,7 @@ balance, and mental relaxation.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'Yoga')">
+onclick="bookClass('Yoga')">
 
 Book Class
 
@@ -143,7 +170,7 @@ strength training sessions.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'Boxing')">
+onclick="bookClass('Boxing')">
 
 Book Class
 
@@ -181,7 +208,7 @@ and endurance workouts.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'Cardio')">
+onclick="bookClass('Cardio')">
 
 Book Class
 
@@ -219,7 +246,7 @@ conditioning workouts.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'CrossFit')">
+onclick="bookClass('CrossFit')">
 
 Book Class
 
@@ -257,7 +284,7 @@ for fun and calorie burning.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'Zumba')">
+onclick="bookClass('Zumba')">
 
 Book Class
 
@@ -295,7 +322,7 @@ overall body strength.
 </p>
 
 <button class="btn-yellow book-btn"
-onclick="bookClass(this, 'Strength Training')">
+onclick="bookClass('Strength Training')">
 
 Book Class
 
@@ -363,15 +390,8 @@ WHY JOIN OUR CLASSES?
 
 <script>
 
-function bookClass(button, className){
-    // Disable the button
-    button.disabled = true;
-    
-    // Change button text and style
-    button.innerHTML = "✓ Booked";
-    button.style.background = "#00c853";
-    button.style.cursor = "not-allowed";
-    button.style.opacity = "0.7";
+function bookClass(className){
+    window.location.href = 'membership.php?class=' + encodeURIComponent(className);
 }
 
 </script>

@@ -1,3 +1,13 @@
+<?php include_once 'db.php';
+
+$events = [];
+$result = mysqli_query($conn, "SELECT * FROM events ORDER BY event_date, id");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $events[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,247 +91,44 @@ competitions, and wellness experiences.
 <div class="container">
 
 <div class="row g-4">
-
-<!-- EVENT 1 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="bootcamp.webp"
-class="trainer-img mb-3"
-alt="Bootcamp">
-
-<h3>Fitness Bootcamp</h3>
-
-<p>
-Outdoor high-intensity training
-with professional trainers.
-</p>
-
-<p>
-📅 June 15, 2026
-</p>
-
-<p>
-⏰ 8:00 AM
-</p>
-
-<p>
-📍 Nairobi Gym Arena
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Fitness Bootcamp')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
-<!-- EVENT 2 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="event%202.webp"
-class="trainer-img mb-3"
-alt="Zumba">
-
-<h3>Zumba Party</h3>
-
-<p>
-Fun dance fitness sessions
-with live DJ music.
-</p>
-
-<p>
-📅 June 20, 2026
-</p>
-
-<p>
-⏰ 5:00 PM
-</p>
-
-<p>
-📍 FEET TO FIT Studio
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Zumba Party')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
-<!-- EVENT 3 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="OIP%20(18).webp"
-class="trainer-img mb-3"
-alt="Yoga">
-
-<h3>Yoga Retreat</h3>
-
-<p>
-Meditation and yoga relaxation
-experience for members.
-</p>
-
-<p>
-📅 July 1, 2026
-</p>
-
-<p>
-⏰ 7:00 AM
-</p>
-
-<p>
-📍 Karura Forest
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Yoga Retreat')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
-<!-- EVENT 4 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="boxing-player-event.avif"
-class="trainer-img mb-3"
-alt="Boxing">
-
-<h3>Boxing Championship</h3>
-
-<p>
-Competitive boxing challenge
-for advanced trainees.
-</p>
-
-<p>
-📅 July 10, 2026
-</p>
-
-<p>
-⏰ 2:00 PM
-</p>
-
-<p>
-📍 FEET TO FIT Arena
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Boxing Championship')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
-<!-- EVENT 5 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="uhuru%20park.webp"
-class="trainer-img mb-3"
-alt="Marathon">
-
-<h3>Marathon Training</h3>
-
-<p>
-Endurance and marathon
-preparation workshop.
-</p>
-
-<p>
-📅 July 15, 2026
-</p>
-
-<p>
-⏰ 6:00 AM
-</p>
-
-<p>
-📍 Uhuru Park
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Marathon Training')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
-<!-- EVENT 6 -->
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card-box text-center h-100">
-
-<img src="nutrition.webp"
-class="trainer-img mb-3"
-alt="Nutrition">
-
-<h3>Nutrition Seminar</h3>
-
-<p>
-Learn healthy eating and
-fitness nutrition strategies.
-</p>
-
-<p>
-📅 July 20, 2026
-</p>
-
-<p>
-⏰ 11:00 AM
-</p>
-
-<p>
-📍 FEET TO FIT Hall
-</p>
-
-<button class="btn-yellow"
-onclick="joinEvent('Nutrition Seminar')">
-
-Join Event
-
-</button>
-
-</div>
-
-</div>
-
+<?php if (!empty($events)): ?>
+    <?php foreach ($events as $event): ?>
+        <div class="col-lg-4 col-md-6">
+            <div class="card-box text-center h-100">
+                <img src="<?= htmlspecialchars($event['image']) ?>"
+                     class="trainer-img mb-3"
+                     alt="<?= htmlspecialchars($event['title']) ?>">
+
+                <h3><?= htmlspecialchars($event['title']) ?></h3>
+
+                <p><?= nl2br(htmlspecialchars($event['description'])) ?></p>
+
+                <p>
+                    📅 <?= htmlspecialchars(date('F j, Y', strtotime($event['event_date']))) ?>
+                </p>
+
+                <p>
+                    ⏰ <?= htmlspecialchars($event['event_time']) ?>
+                </p>
+
+                <p>
+                    📍 <?= htmlspecialchars($event['location']) ?>
+                </p>
+
+                <button class="btn-yellow"
+                        onclick="joinEvent('<?= addslashes(htmlspecialchars($event['title'])) ?>')">
+                    Join Event
+                </button>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div class="col-12">
+        <div class="card-box text-center">
+            <p class="mb-0">No upcoming events are available right now. Please check back soon.</p>
+        </div>
+    </div>
+<?php endif; ?>
 </div>
 
 <!-- EVENT MESSAGE -->

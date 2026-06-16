@@ -1,6 +1,7 @@
 
 
 <?php
+include_once 'assets/db.php';
 $name = $_POST['name'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -70,7 +71,7 @@ $name = $_POST['name'] ?? '';
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/schedule.php">Schedule</a>
+          <a class="nav-link" href="assets\schedule.php">Schedule</a>
         </li>
 
         <li class="nav-item">

@@ -1,5 +1,7 @@
 <?php
-require_once 'db_connect.php';
+include_once 'auth.php';
+requireLogin();
+include_once 'db.php';
 
 $products = [];
 $result = $conn->query("SELECT id, title, price, image, alt FROM products ORDER BY id");
@@ -45,7 +47,11 @@ href="style.css">
 
 <a href="contact.php">Contact</a>
 
-<span id="userInfo"></span>
+<?php if (isLoggedIn()): ?>
+<span class="ms-3">Welcome, <?php echo htmlspecialchars(getLoggedInUserName()); ?> | <a href="logout.php">Logout</a></span>
+<?php else: ?>
+<a href="login.php">Login</a>
+<?php endif; ?>
 
 </nav>
 

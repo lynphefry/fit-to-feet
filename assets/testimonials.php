@@ -1,3 +1,13 @@
+<?php include_once 'db.php';
+
+$testimonials = [];
+$result = mysqli_query($conn, "SELECT * FROM testimonials ORDER BY id");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $testimonials[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,56 +47,32 @@
 
 </nav>
 
-<div class="col-lg-4 col-md-6">
+<div class="container py-5">
 
 <h1 class="text-center mb-5">
 TESTIMONIALS
 </h1>
 
 <div class="row g-4">
-
-<div class="col-lg-4">
-
-<div class="card-box">
-
-<h3>MERCY</h3>
-<img src="OIP%20(4).webp" alt="Mercy testimonial photo">
-<p>
-Amazing trainers and modern equipment.
-</p>
-
-</div>
-
-</div>
-
-<div class="col-lg-4">
-
-<div class="card-box">
-
-<h3>JOAN</h3>
-<img src="OIP%20(16).webp" alt="Joan testimonial photo">
-<p>
-I lost weight and gained confidence.
-</p>
-
-</div>
-
-</div>
-
-<div class="col-lg-4">
-
-<div class="card-box">
-
-<h3>Kevin</h3>
-<img src="OIP%20(17).webp" alt="Kevin testimonial photo">
-<p>
-Best gym experience ever.
-</p>
-
-</div>
-
-</div>
-
+    <?php if (!empty($testimonials)): ?>
+        <?php foreach ($testimonials as $testimonial): ?>
+            <div class="col-lg-4">
+                <div class="card-box">
+                    <h3><?= htmlspecialchars($testimonial['name']) ?></h3>
+                    <img src="<?= htmlspecialchars($testimonial['image']) ?>" alt="<?= htmlspecialchars($testimonial['name']) ?> testimonial photo">
+                    <p>
+                        <?= nl2br(htmlspecialchars($testimonial['message'])) ?>
+                    </p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="col-12">
+            <div class="card-box text-center">
+                <p>No testimonials are available right now.</p>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 </div>

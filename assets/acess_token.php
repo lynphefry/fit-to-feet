@@ -1,4 +1,4 @@
-<?php
+<?php include_once 'db.php';
 
 $consumerKey = "YOUR_CONSUMER_KEY";
 $consumerSecret = "YOUR_CONSUMER_SECRET";

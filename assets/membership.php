@@ -1,15 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<?php
+include_once 'auth.php';
+include 'db.php';
 
-<head>
-
-<meta charset="UTF-8">
-
-<?php
-// membership.php - show form on GET, handle POST and display confirmation
 $submitted = false;
 $errors = [];
 $name = $email = $phone = $password = $plan = '';
+$selectedClass = trim($_GET['class'] ?? '');
+
+$createTableSql = "CREATE TABLE IF NOT EXISTS members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) DEFAULT '',
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) DEFAULT '',
+    password VARCHAR(255) DEFAULT '',
+    plan VARCHAR(50) DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+mysqli_query($conn, $createTableSql);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['memberName'] ?? '');
@@ -18,473 +26,167 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['memberPassword'] ?? '');
     $plan = trim($_POST['memberPlan'] ?? '');
 
-    if ($name === '') $errors[] = 'Name is required.';
-    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
-    if ($phone === '') $errors[] = 'Phone is required.';
-    if ($password === '') $errors[] = 'Password is required.';
+    if ($name === '') {
+        $errors[] = 'Name is required.';
+    }
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'A valid email is required.';
+    }
+    if ($phone === '') {
+        $errors[] = 'Phone is required.';
+    }
+    if ($password === '') {
+        $errors[] = 'Password is required.';
+    }
+    if ($plan === '') {
+        $errors[] = 'Please select a plan.';
+    }
 
     if (empty($errors)) {
-        $submitted = true;
+        $parts = explode(' ', $name, 2);
+        $first_name = $parts[0];
+        $last_name = $parts[1] ?? '';
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = mysqli_prepare($conn, "INSERT INTO members (first_name, last_name, email, phone, password, plan) VALUES (?, ?, ?, ?, ?, ?)");
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 'ssssss', $first_name, $last_name, $email, $phone, $passwordHash, $plan);
+            if (mysqli_stmt_execute($stmt)) {
+                $submitted = true;
+                $newMemberId = mysqli_insert_id($conn);
+                loginUser($newMemberId, $email, $first_name);
+                header('Location: account.php');
+                exit;
+            } else {
+                $errors[] = 'Unable to save membership: ' . mysqli_error($conn);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            $errors[] = 'Database error: ' . mysqli_error($conn);
+        }
     }
 }
 ?>
-<?php
-include 'db.php';
-
-$result = mysqli_query($conn, "SELECT * FROM members");
-
-while($row = mysqli_fetch_assoc($result)){
-    echo $row['first_name'] . " " . $row['last_name'] . "<br>";
-}
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Membership | FEET TO FIT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-
-<a href="../index.php">Home</a>
-
-<a href="trainers.php">Trainers</a>
-
-<a href="classes.php">Classes</a>
-
-<a href="schedule.php">Schedule</a>
-
-<a href="membership.php">Membership</a>
-
-<a href="shop.php">Shop</a>
-
-<a href="testimonials.php">Testimonials</a>
-
-<a href="contact.php">Contact</a>
-
-<a href="login.php">Login</a>
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <a class="navbar-brand" href="../index.php">FEET TO FIT</a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="../index.php">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="trainers.php">Trainers</a></li>
+      <li class="nav-item"><a class="nav-link" href="classes.php">Classes</a></li>
+      <li class="nav-item"><a class="nav-link" href="schedule.php">Schedule</a></li>
+      <li class="nav-item"><a class="nav-link active" href="membership.php">Membership</a></li>
+      <li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
+      <li class="nav-item"><a class="nav-link" href="testimonials.php">Testimonials</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+      <?php if (isLoggedIn()): ?>
+      <li class="nav-item"><a class="nav-link" href="account.php">My Account</a></li>
+      <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+      <?php else: ?>
+      <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+      <?php endif; ?>
+    </ul>
+  </div>
 </nav>
-<div class="container mt-5">
-<?php if ($submitted): ?>
-    <div class="card p-4">
-        <h2 class="text-success">Registration Successful</h2>
-        <hr>
-        <p><strong>Name:</strong> <?php echo htmlspecialchars($name); ?></p>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-        <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
-        <p><strong>Plan:</strong> <?php echo htmlspecialchars($plan); ?></p>
-        <p><strong>Password:</strong> (hidden)</p>
-        <a href="membership.php" class="btn btn-primary">Register another</a>
-        <a href="../index.php" class="btn btn-link">Home</a>
-    </div>
-<?php else: ?>
-    <div class="card p-4">
-        <h2 class="mb-3">Join FEET TO FIT</h2>
-        <?php if (!empty($errors)): ?>
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    <?php foreach ($errors as $e): ?>
-                        <li><?php echo htmlspecialchars($e); ?></li>
-                    <?php endforeach; ?>
-                </ul>
+<div class="container my-5">
+    <?php if ($submitted): ?>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-success">Registration Successful</h2>
+                <p><strong>Name:</strong> <?php echo htmlspecialchars($name); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+                <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
+                <p><strong>Plan:</strong> <?php echo htmlspecialchars($plan); ?></p>
+                <a href="membership.php" class="btn btn-primary">Register another</a>
+                <a href="../index.php" class="btn btn-link">Home</a>
             </div>
-        <?php endif; ?>
-
-        <form method="post" action="membership.php">
-            <div class="mb-3">
-                <label class="form-label">Full name</label>
-                <input name="memberName" class="form-control" value="<?php echo htmlspecialchars($name); ?>">
+        </div>
+    <?php else: ?>
+        <div class="row gy-4">
+            <div class="col-lg-5">
+                <div class="card shadow-sm p-4">
+                    <h2 class="mb-3">Select Your Plan</h2>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-primary w-100 mb-2" onclick="selectPlan('monthly')">Basic - Ksh 2,000</button>
+                        <button type="button" class="btn btn-outline-primary w-100 mb-2" onclick="selectPlan('quarterly')">Premium - Ksh 5,000</button>
+                        <button type="button" class="btn btn-outline-primary w-100" onclick="selectPlan('yearly')">VIP - Ksh 8,000</button>
+                    </div>
+                    <p id="selectedPlanText" class="fw-bold">Selected plan: <?php echo $plan ? htmlspecialchars(ucfirst($plan)) : 'None'; ?></p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input name="memberEmail" type="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+            <div class="col-lg-7">
+                <div class="card shadow-sm p-4">
+                    <h2 class="mb-3">Join FEET TO FIT</h2>
+                    <?php if (!empty($selectedClass)): ?>
+                        <div class="alert alert-info">
+                            You selected <strong><?php echo htmlspecialchars($selectedClass); ?></strong>. Complete this form to book that class.
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                <?php foreach ($errors as $e): ?>
+                                    <li><?php echo htmlspecialchars($e); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <form method="post" action="membership.php" id="membershipForm">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full name</label>
+                                <input name="memberName" class="form-control" value="<?php echo htmlspecialchars($name); ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input name="memberEmail" type="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input name="memberPhone" class="form-control" value="<?php echo htmlspecialchars($phone); ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Password</label>
+                                <input name="memberPassword" type="password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Plan</label>
+                            <select name="memberPlan" id="memberPlan" class="form-select">
+                                <option value="">Select a plan</option>
+                                <option value="monthly" <?php if ($plan === 'monthly') echo 'selected'; ?>>Monthly</option>
+                                <option value="quarterly" <?php if ($plan === 'quarterly') echo 'selected'; ?>>Quarterly</option>
+                                <option value="yearly" <?php if ($plan === 'yearly') echo 'selected'; ?>>Yearly</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Phone</label>
-                <input name="memberPhone" class="form-control" value="<?php echo htmlspecialchars($phone); ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input name="memberPassword" type="password" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Plan</label>
-                <select name="memberPlan" class="form-select">
-                    <option value="">Select a plan</option>
-                    <option value="monthly" <?php if ($plan==='monthly') echo 'selected'; ?>>Monthly</option>
-                    <option value="quarterly" <?php if ($plan==='quarterly') echo 'selected'; ?>>Quarterly</option>
-                    <option value="yearly" <?php if ($plan==='yearly') echo 'selected'; ?>>Yearly</option>
-                </select>
-            </div>
-            <button class="btn btn-primary">Register</button>
-            <a href="../index.php" class="btn btn-link">Cancel</a>
-        </form>
-    </div>
-<?php endif; ?>
+        </div>
+    <?php endif; ?>
 </div>
-</body>
-</html>
-<div class="row-lg-4">
-
-<div class="card-box text-center">
-
-<h2>Basic</h2>
-
-<h3>Ksh 2,000</h3>
-
-<h5 class="text-success">
-Perfect For Beginners
-</h5>
-
-<ul class="list-unstyled mt-4">
-
-<li>✔ Gym Access</li>
-
-<li>✔ Locker Access</li>
-
-<li>✔ Free WiFi</li>
-
-<li>✔ Cardio Area</li>
-
-<li>✔ Weight Training</li>
-
-</ul>
-
-<button class="btn-yellow mt-3"
-onclick="selectPlan('Basic Plan','2000')">
-
-Choose Plan
-
-</button>
-
-</div>
-
-</div> <br>
-
-<!-- PREMIUM -->
-
-<div class="row-lg-4">
-
-<div class="card-box text-center">
-
-<h2>Premium</h2>
-
-<h3>Ksh 5,000</h3>
-
-<h5 class="text-success">
-🔥 Most Popular
-</h5>
-
-<ul class="list-unstyled mt-4">
-
-<li>✔ Personal Trainer</li>
-
-<li>✔ Fitness Classes</li>
-
-<li>✔ Nutrition Guide</li>
-
-<li>✔ Shower Access</li>
-
-<li>✔ Fitness Tracking</li>
-
-</ul>
-
-<button class="btn-yellow mt-3"
-onclick="selectPlan('Premium Plan','5000')">
-
-Choose Plan
-
-</button>
-
-</div>
-
-</div> <br>
-
-<!-- VIP -->
-
-<div class="row-lg-4">
-
-<div class="card-box text-center">
-
-<h2>VIP</h2>
-
-<h3>Ksh 8,000</h3>
-
-<h5 class="text-success">
-Elite Fitness Access
-</h5>
-
-<ul class="list-unstyled mt-4">
-
-<li>✔ Unlimited Gym Access</li>
-
-<li>✔ VIP Trainer</li>
-
-<li>✔ Sauna Access</li>
-
-<li>✔ Free Supplements</li>
-
-<li>✔ Full Body Analysis</li>
-
-</ul> <br>
-
-<button class="btn-yellow mt-3"
-onclick="selectPlan('VIP Plan','8000')">
-
-Choose Plan
-
-</button>
-
-</div>
-
-</div>
-
-</div> <br>
-
-<!-- REGISTRATION -->
-
-<div class="card-box mt-5">
-
-<h2 class="text-center mb-4">
-Member Registration
-</h2>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<input type="text"
-id="memberName"
-class="form-control"
-placeholder="Enter Full Name">
-
-</div> <br>
-
-<div class="col-md-6 mb-3">
-
-<input type="email"
-id="memberEmail"
-class="form-control"
-placeholder="Enter Email">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<input type="text"
-id="memberPhone"
-class="form-control"
-placeholder="Enter Phone Number">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<input type="password"
-id="memberPassword"
-class="form-control"
-placeholder="Create Password">
-
-</div>
-
-</div>
-
-<div class="text-center">
-
-<button class="btn-yellow"
-onclick="registerMember()">
-
-Register Member
-
-</button>
-
-</div>
-
-</div>
-
-<!-- PAYMENT SECTION -->
-
-<div class="card-box mt-5 text-center">
-
-<h2>M-Pesa Payment</h2>
-
-<p>
-Pay Membership Fee Via M-Pesa
-</p>
-
-<input type="text"
-id="mpesaNumber"
-class="form-control mb-3"
-placeholder="Enter M-Pesa Number">
-
-<button class="btn-yellow"
-onclick="payNow()">
-
-Pay Now
-
-</button>
-
-<p id="paymentMessage"></p>
-
-</div>
-
-<!-- MEMBERSHIP CARD -->
-
-<div class="card-box mt-5 text-center">
-
-<h2>Membership Card</h2>
-
-<p id="cardDetails"></p>
-
-<div id="qrcode"
-class="d-flex justify-content-center mt-4"></div>
-
-<button class="btn-yellow mt-4"
-onclick="downloadCard()">
-
-Download Membership Card
-
-</button>
-
-</div>
-
-<!-- RECEIPT -->
-
-<div class="card-box mt-5">
-
-<h2 class="text-center">
-Membership Receipt
-</h2>
-
-<p id="receipt"></p>
-
-</div>
-
-<!-- CHECK IN -->
-
-<div class="card-box mt-5 text-center">
-
-<h2>QR Check-In System</h2>
-
-<p>
-Scan QR Code At Gym Entrance
-</p>
-
-</div>
-
-</div>
-
-<!-- SCRIPT -->
-
 <script>
-
-let selectedPlan = "";
-let selectedPrice = "";
-
-/* SELECT PLAN */
-
-function selectPlan(plan, price){
-
-    selectedPlan = plan;
-
-    selectedPrice = price;
-
-    alert("✅ You selected " + plan);
-
+function selectPlan(plan) {
+    const select = document.getElementById('memberPlan');
+    if (select) {
+        select.value = plan;
+    }
+    const display = document.getElementById('selectedPlanText');
+    if (display) {
+        display.textContent = 'Selected plan: ' + plan.charAt(0).toUpperCase() + plan.slice(1);
+    }
 }
-
-/* REGISTER */
-
-function registerMember(){
-
-    const name =
-    document.getElementById("memberName").value;
-
-    const email =
-    document.getElementById("memberEmail").value;
-
-    const phone =
-    document.getElementById("memberPhone").value;
-
-    const card =
-    document.getElementById("cardDetails");
-
-    card.innerHTML =
-    `
-    <h3>${name}</h3>
-    <p>${selectedPlan}</p>
-    <p>${phone}</p>
-    <p>${email}</p>
-    `;
-
-    /* QR CODE */
-
-    document.getElementById("qrcode").innerHTML = "";
-
-    new QRCode(document.getElementById("qrcode"), {
-
-        text:
-        name + " - " + selectedPlan,
-
-        width:150,
-
-        height:150
-
-    });
-
-    /* RECEIPT */
-
-    document.getElementById("receipt")
-    .innerHTML =
-    `
-    <strong>Name:</strong> ${name}<br>
-    <strong>Plan:</strong> ${selectedPlan}<br>
-    <strong>Amount:</strong> Ksh ${selectedPrice}<br>
-    <strong>Status:</strong> Pending Payment
-    `;
-
-    alert("✅ Registration Successful!");
-
-}
-
-/* PAYMENT */
-
-function payNow(){
-
-    const number =
-    document.getElementById("mpesaNumber").value;
-
-    const payment =
-    document.getElementById("paymentMessage");
-
-    payment.innerHTML =
-    `
-    ✅ Payment Request Sent To
-    ${number}
-    Via M-Pesa
-    `;
-
-    payment.style.color = "#00c853";
-
-    payment.style.fontWeight = "bold";
-
-}
-
-/* DOWNLOAD */
-
-function downloadCard(){
-
-    window.print();
-
-}
-
 </script>
-
 </body>
-
 </html>

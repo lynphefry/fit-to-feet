@@ -1,3 +1,13 @@
+<?php include_once 'db.php';
+
+$trainers = [];
+$result = mysqli_query($conn, "SELECT * FROM trainers ORDER BY id");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $trainers[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,161 +66,39 @@
   </h1>
 
   <div class="row g-4">
+    <?php if (!empty($trainers)): ?>
+        <?php foreach ($trainers as $trainer): ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="card-box">
+                    <img src="<?= htmlspecialchars($trainer['image']) ?>"
+                         class="trainer-img"
+                         alt="<?= htmlspecialchars($trainer['name']) ?>">
 
-    <!-- TRAINER 1 -->
+                    <h3 class="mt-3">
+                        <?= htmlspecialchars($trainer['name']) ?>
+                    </h3>
 
-    <div class="col-lg-4 col-md-6">
+                    <p>
+                        <?= htmlspecialchars($trainer['role']) ?>
+                    </p>
 
-      <div class="card-box">
+                    <p>
+                        <?= nl2br(htmlspecialchars($trainer['bio'])) ?>
+                    </p>
 
-        <img src="trainer%203.jpg"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          John Fitness
-        </h3>
-
-        <p>
-          Strength Coach
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-
-      </div>
-
-    </div> <br>
-
-    <!-- TRAINER 2 -->
-
-    <div class="col-lg-4 col-md-6">
-
-      <div class="card-box">
-
-        <img src="black%20yoga.webp"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          Sarah Yoga
-        </h3>
-
-        <p>
-          Yoga Instructor
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-
-      </div>
-
-    </div> <br>
-
-    <!-- TRAINER 3 -->
-
-    <div class="col-lg-4 col-md-6">
-
-      <div class="card-box">
-
-        <img src="gymnastics.webp"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          Mike Gymnastics
-        </h3>
-
-        <p>
-          Gymnastics Trainer
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-
-      </div>
-
-    </div>
-
-  </div> <br>
-<div class="row g-4">
-    <div class="col-lg-4 col-md-6">
-
-      <div class="card-box">
-
-        <img src="pilates.jpg"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          ANDY
-        </h3>
-
-        <p>
-          pilates Trainer
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-</div>
-    </div> <br>
-     <div class="col-lg-4 col-md-6">
-
-      <div class="card-box">
-
-        <img src="mirror.jpg"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          AMELIA
-        </h3>
-
-        <p>
-          zumba Instructor
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-
-      </div>
-
-    </div> <br>
-    <div class="col-lg-4 col-md-6">
-
-      <div class="card-box">
-
-        <img src="trainer%204.webp"
-        class="trainer-img"
-        alt="Trainer">
-
-        <h3 class="mt-3">
-          benji
-        </h3>
-
-        <p>
-          Boxing Instructor
-        </p>
-
-        <a href="contact.php"
-        class="btn-yellow">
-          Book Now
-        </a>
-
-      </div>
-    </div>
-    </div>
-</div>
-</body>
-
+                    <a href="contact.php"
+                       class="btn-yellow">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="col-12">
+            <div class="card-box text-center">
+                <p>No trainers are available at the moment.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+  </div>
 </html>

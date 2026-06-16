@@ -1,3 +1,46 @@
+<?php
+include_once 'db.php';
+include_once 'auth.php';
+
+$loginMessage = '';
+$userType = '';
+$email = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
+    $userType = trim($_POST['userType'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    if ($userType === '') {
+        $loginMessage = 'Please select user type.';
+    } elseif ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $loginMessage = 'Please enter a valid email.';
+    } elseif ($password === '') {
+        $loginMessage = 'Please enter your password.';
+    } else {
+        $stmt = mysqli_prepare($conn, "SELECT id, password, first_name FROM members WHERE email = ?");
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 's', $email);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $userId, $hashedPassword, $firstName);
+            if (mysqli_stmt_fetch($stmt)) {
+                if (password_verify($password, $hashedPassword)) {
+                    loginUser($userId, $email, $firstName);
+                    header('Location: account.php');
+                    exit;
+                } else {
+                    $loginMessage = 'Incorrect email or password.';
+                }
+            } else {
+                $loginMessage = 'Incorrect email or password.';
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            $loginMessage = 'Database error: ' . mysqli_error($conn);
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,7 +92,11 @@ href="style.css">
 
 <a href="contact.php">Contact</a>
 
+<?php if (isLoggedIn()): ?>
+<a href="logout.php">Logout</a>
+<?php else: ?>
 <a href="login.php">Login</a>
+<?php endif; ?>
 
 </nav>
 
@@ -75,7 +122,8 @@ Welcome Back To FEET TO FIT
 
 <!-- LOGIN FORM -->
 
-<form id="loginForm">
+<form id="loginForm" method="post" action="login.php">
+<input type="hidden" name="login_submit" value="1">
 
 <!-- USER TYPE -->
 
@@ -86,7 +134,8 @@ Login As
 </label>
 
 <select class="form-control"
-id="userType">
+id="userType"
+name="userType">
 
 <option value="">
 Select User Type
@@ -116,7 +165,9 @@ Email
 type="email"
 class="form-control"
 id="email"
+name="email"
 placeholder="Enter Email"
+value="<?= htmlspecialchars($email) ?>"
 required>
 
 </div>
@@ -135,6 +186,7 @@ Password
 type="password"
 class="form-control"
 id="password"
+name="password"
 placeholder="Enter Password"
 required>
 
@@ -144,7 +196,7 @@ class="btn btn-success"
 onclick="showPassword()"
 aria-label="Show password">
 
-<i class="fa fa-eye"></i>
+<i id="togglePasswordIcon" class="fa fa-eye"></i>
 
 </button>
 
@@ -186,8 +238,7 @@ Login
 
 <!-- LOGIN MESSAGE -->
 
-<p id="loginMessage"
-class="text-center mt-4"></p>
+<p id="loginMessage" class="text-center mt-4"><?= htmlspecialchars($loginMessage) ?></p>
 
 <!-- REGISTER -->
 
@@ -215,96 +266,29 @@ Register Here
 </div>
 
 </section>
-<?php
-include 'db.php';
-
-if(isset($_POST['submit'])){
-    $fname = $_POST['first_name'];
-    $lname = $_POST['last_name'];
-    $email = $_POST['email'];
-
-    $sql = "INSERT INTO members(first_name,last_name,email)
-            VALUES('$fname','$lname','$email')";
-
-    mysqli_query($conn, $sql);
-}
-?>
-
-<form method="POST">
-    <input type="text" name="first_name" placeholder="First Name">
-    <input type="text" name="last_name" placeholder="Last Name">
-    <input type="email" name="email" placeholder="Email">
-    <button type="submit" name="submit">Register</button>
-</form>
 
 <!-- SCRIPT -->
 
 <script>
 
-/* SHOW PASSWORD */
-
 function showPassword(){
+    const password = document.getElementById('password');
+    const icon = document.getElementById('togglePasswordIcon');
 
-    const password =
-    document.getElementById("password");
-
-    if(password.type === "password"){
-
-        password.type = "text";
-
+    if (password.type === 'password') {
+        password.type = 'text';
+        if (icon) {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    } else {
+        password.type = 'password';
+        if (icon) {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     }
-
-    else{
-
-        password.type = "password";
-
-    }
-
 }
-
-/* LOGIN */
-
-document.getElementById("loginForm")
-
-.addEventListener("submit",
-
-function(event){
-
-event.preventDefault();
-
-const userType =
-document.getElementById("userType").value;
-
-const email =
-document.getElementById("email").value;
-
-const message =
-document.getElementById("loginMessage");
-
-if(userType === ""){
-
-    message.innerHTML =
-    "⚠ Please Select User Type";
-
-    message.style.color = "red";
-
-}
-
-else{
-
-    message.innerHTML =
-    "✅ " + userType +
-    " Logged In Successfully";
-
-    message.style.color =
-    "#00c853";
-
-    message.style.fontWeight =
-    "bold";
-
-}
-
-});
 
 </script>
 
