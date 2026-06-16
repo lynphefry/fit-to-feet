@@ -29,21 +29,21 @@
 
 <nav>
 
-  <a href="../index.html">Home</a>
+  <a href="../index.php">Home</a>
 
-  <a href="trainers.html">Trainers</a>
+  <a href="trainers.php">Trainers</a>
 
-  <a href="classes.html">Classes</a>
+  <a href="classes.php">Classes</a>
 
-  <a href="schedule.html">Schedule</a>
+  <a href="schedule.php">Schedule</a>
 
-  <a href="membership.html">Membership</a>
+  <a href="membership.php">Membership</a>
 
-  <a href="testimonials.html">Testimonials</a>
+  <a href="testimonials.php">Testimonials</a>
 
-  <a href="contact.html">Contact</a>
+  <a href="contact.php">Contact</a>
 
-  <a href="login.html">Login</a>
+  <a href="login.php">Login</a>
 
 </nav>
 
@@ -63,7 +63,7 @@
 
       <div class="card-box">
 
-        <img src="/assets\trainer 3.jpg"
+        <img src="trainer%203.jpg"
         class="trainer-img"
         alt="Trainer">
 
@@ -75,14 +75,14 @@
           Strength Coach
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>
 
       </div>
 
-    </div>
+    </div> <br>
 
     <!-- TRAINER 2 -->
 
@@ -90,7 +90,7 @@
 
       <div class="card-box">
 
-        <img src="/assets\black yoga.webp"
+        <img src="black%20yoga.webp"
         class="trainer-img"
         alt="Trainer">
 
@@ -102,14 +102,14 @@
           Yoga Instructor
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>
 
       </div>
 
-    </div>
+    </div> <br>
 
     <!-- TRAINER 3 -->
 
@@ -117,7 +117,7 @@
 
       <div class="card-box">
 
-        <img src="/assets\gymnastics.webp"
+        <img src="gymnastics.webp"
         class="trainer-img"
         alt="Trainer">
 
@@ -129,7 +129,7 @@
           Gymnastics Trainer
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>
@@ -138,13 +138,13 @@
 
     </div>
 
-  </div>
+  </div> <br>
 <div class="row g-4">
     <div class="col-lg-4 col-md-6">
 
       <div class="card-box">
 
-        <img src="/assets\pilates.jpg"
+        <img src="pilates.jpg"
         class="trainer-img"
         alt="Trainer">
 
@@ -156,17 +156,17 @@
           pilates Trainer
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>
 </div>
-    </div>
+    </div> <br>
      <div class="col-lg-4 col-md-6">
 
       <div class="card-box">
 
-        <img src="/assets\mirror.jpg"
+        <img src="mirror.jpg"
         class="trainer-img"
         alt="Trainer">
 
@@ -178,19 +178,19 @@
           zumba Instructor
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>
 
       </div>
 
-    </div>
+    </div> <br>
     <div class="col-lg-4 col-md-6">
 
       <div class="card-box">
 
-        <img src="/assets\trainer 4.webp"
+        <img src="trainer%204.webp"
         class="trainer-img"
         alt="Trainer">
 
@@ -202,7 +202,7 @@
           Boxing Instructor
         </p>
 
-        <a href="contact.html"
+        <a href="contact.php"
         class="btn-yellow">
           Book Now
         </a>

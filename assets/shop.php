@@ -1,3 +1,14 @@
+<?php
+require_once 'db_connect.php';
+
+$products = [];
+$result = $conn->query("SELECT id, title, price, image, alt FROM products ORDER BY id");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $products[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,11 +39,11 @@ href="style.css">
 
 <nav>
 
-<a href="../index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="shop.html">Shop</a>
+<a href="shop.php">Shop</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
 <span id="userInfo"></span>
 
@@ -47,83 +58,32 @@ GYM SHOP
 </h1>
 
 <div class="row" id="productsContainer">
+<?php if (!empty($products)): ?>
+  <?php foreach ($products as $product): ?>
+    <div class="col-md-4 mb-4">
+      <div class="card-box">
+        <img src="<?php echo htmlspecialchars($product['image'], ENT_QUOTES); ?>"
+          class="img-fluid mb-3"
+          alt="<?php echo htmlspecialchars($product['alt'], ENT_QUOTES); ?>">
 
-<!-- PRODUCT 1 -->
+        <h3><?php echo htmlspecialchars($product['title'], ENT_QUOTES); ?></h3>
 
-<div class="col-md-4 mb-4">
+        <p>Ksh <?php echo number_format($product['price'], 0); ?></p>
 
-<div class="card-box">
+        <button class="btn-yellow"
+          onclick="addToCart('<?php echo addslashes($product['title']); ?>', <?php echo $product['price']; ?>)">
 
-<img src="OIP (5).webp"
-class="img-fluid mb-3"
-alt="female outfit">
+          Add To Cart
 
-<h3>Gym Outfit For Female</h3>
-
-<p>Ksh 3,500</p>
-
-<button class="btn-yellow"
-onclick="addToCart('Gym Outfit For Female', 3500)">
-
-Add To Cart
-
-</button>
-
-</div>
-
-</div>
-
-<!-- PRODUCT 2 -->
-
-<div class="col-md-4 mb-4">
-
-<div class="card-box">
-
-<img src="OIP (11).webp"
-class="img-fluid mb-3"
-alt="male outfit">
-
-<h3>Gym Outfit For Men</h3>
-
-<p>Ksh 1,800</p>
-
-<button class="btn-yellow"
-onclick="addToCart('Gym Outfit For Men', 1800)">
-
-Add To Cart
-
-</button>
-
-</div>
-
-</div>
-
-<!-- PRODUCT 3 -->
-
-<div class="col-md-4 mb-4">
-
-<div class="card-box">
-
-<img src="enquirenowpopup.webp"
-class="img-fluid mb-3"
-alt="yoga mat">
-
-<h3>Yoga Mat</h3>
-
-<p>Ksh 2,000</p>
-
-<button class="btn-yellow"
-onclick="addToCart('Yoga Mat', 2000)">
-
-Add To Cart
-
-</button>
-
-</div>
-
-</div>
-
-</div>
+        </button>
+      </div>
+    </div>
+  <?php endforeach; ?>
+<?php else: ?>
+  <div class="col-12">
+    <p class="text-center">No products available. Please check your database setup.</p>
+  </div>
+<?php endif; ?>
 
 <!-- CART -->
 

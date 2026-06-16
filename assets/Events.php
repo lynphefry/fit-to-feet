@@ -33,25 +33,25 @@ href="style.css">
 
 <nav>
 
-<a href="../index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="shop.html">Shop</a>
+<a href="shop.php">Shop</a>
 
-<a href="events.html">Events</a>
+<a href="Events.php">Events</a>
 
-<a href="testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 
@@ -88,7 +88,7 @@ competitions, and wellness experiences.
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/bootcamp.webp"
+<img src="bootcamp.webp"
 class="trainer-img mb-3"
 alt="Bootcamp">
 
@@ -128,7 +128,7 @@ Join Event
 
 <div class="card-box text-center h-100">
 
-<img src="/assets\event 2.webp"
+<img src="event%202.webp"
 class="trainer-img mb-3"
 alt="Zumba">
 
@@ -168,7 +168,7 @@ Join Event
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/OIP (18).webp"
+<img src="OIP%20(18).webp"
 class="trainer-img mb-3"
 alt="Yoga">
 
@@ -208,7 +208,7 @@ Join Event
 
 <div class="card-box text-center h-100">
 
-<img src="/assets\boxing-player-event.avif"
+<img src="boxing-player-event.avif"
 class="trainer-img mb-3"
 alt="Boxing">
 
@@ -248,7 +248,7 @@ Join Event
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/uhuru park.webp"
+<img src="uhuru%20park.webp"
 class="trainer-img mb-3"
 alt="Marathon">
 
@@ -288,7 +288,7 @@ Join Event
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/nutrition.webp"
+<img src="nutrition.webp"
 class="trainer-img mb-3"
 alt="Nutrition">
 

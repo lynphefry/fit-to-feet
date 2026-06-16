@@ -1,3 +1,8 @@
+
+
+<?php
+$name = $_POST['name'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets\style.css">
 
 </head>
 
@@ -49,43 +54,43 @@
       <ul class="navbar-nav align-items-center">
 
         <li class="nav-item">
-          <a class="nav-link active" href="index.html">Home</a>
+          <a class="nav-link active" href="index.php">Home</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/trainers.html">Trainers</a>
+          <a class="nav-link" href="assets/trainers.php">Trainers</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/classes.html">Classes</a>
+          <a class="nav-link" href="assets/classes.php">Classes</a>
         </li>
 
          <li class="nav-item">
-          <a class="nav-link" href="assets/Events.html">Events</a>
+          <a class="nav-link" href="assets/Events.php">Events</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/schedule.html">Schedule</a>
+          <a class="nav-link" href="assets/schedule.php">Schedule</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/membership.html">Membership</a>
+          <a class="nav-link" href="assets/membership.php">Membership</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/testimonials.html">Testimonials</a>
+          <a class="nav-link" href="assets/testimonials.php">Testimonials</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="assets/contact.html">Contact</a>
+          <a class="nav-link" href="assets/contact.php">Contact</a>
         </li>
          <li class="nav-item">
-          <a class="nav-link" href="assets/shop.html">Shop</a>
+          <a class="nav-link" href="assets/shop.php">Shop</a>
          </li>
 
         <li class="nav-item">
           <a class="btn-yellow ms-3"
-          href="assets/login.html">
+          href="assets/login.php">
             Login
           </a>
         </li>
@@ -126,12 +131,12 @@
 
         <div class="mt-4">
 
-          <a href="assets/membership.html"
+          <a href="assets/membership.php"
           class="btn-yellow me-3">
             Join Now
           </a>
 
-          <a href="assets/schedule.html"
+          <a href="assets/schedule.php"
           class="btn-outline-custom">
             View Schedule
           </a>
@@ -164,21 +169,21 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="assets\black.jpg" class="d-block w-100" alt="Gym 1">
+      <img src="assets/black.jpg" class="d-block w-100" alt="Gym 1">
       <div class="carousel-caption d-none d-md-block">
         <h5>Welcome to Feet To Fit Gym</h5>
         <p>Train Hard. Stay Strong.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="assets\adapt-2_0-seamless-sports-bra-cherry-brown-womens-2_60f6e7b2.jpg" class="d-block w-100" alt="Gym 2">
+      <img src="assets/adapt-2_0-seamless-sports-bra-cherry-brown-womens-2_60f6e7b2.jpg" class="d-block w-100" alt="Gym 2">
       <div class="carousel-caption d-none d-md-block">
         <h5>Modern Equipment</h5>
         <p>State-of-the-art fitness machines.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="assets\woman.webp" class="d-block w-100" alt="Gym 3">
+      <img src="assets/woman.webp" class="d-block w-100" alt="Gym 3">
       <div class="carousel-caption d-none d-md-block">
         <h5>Expert Trainers</h5>
         <p>Guidance from certified professionals.</p>

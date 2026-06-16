@@ -9,10 +9,10 @@ https://fit-to-feet.vercel.app
 
 ```
 fit-to-feet/
-├── index.html              # Home page
+├── index.php              # Home page
 ├── assets/
-│   ├── shop.html          # Shop/products page
-│   ├── contact.html       # Contact page
+│   ├── shop.php          # Shop/products page
+│   ├── contact.php       # Contact page
 │   ├── style.css          # Custom styles
 │   └── images/            # Product images
 ├── vercel.json            # Vercel configuration
@@ -30,18 +30,18 @@ fit-to-feet/
 
 ## 📖 Pages
 
-### Home Page (index.html)
+### Home Page (index.php)
 - Welcome banner
 - Features overview
 - Call-to-action button to shop
 
-### Shop Page (assets/shop.html)
+### Shop Page (assets/shop.php)
 - Product listings with images
 - Add to cart functionality
 - Shopping cart with totals
 - Checkout button
 
-### Contact Page (assets/contact.html)
+### Contact Page (assets/contact.php)
 - Contact form
 - Business information
 - Hours of operation
@@ -55,16 +55,15 @@ git clone https://github.com/lynphefry/fit-to-feet.git
 cd fit-to-feet
 ```
 
-2. Start a local server
+2. Start a local PHP server
 ```bash
-# Using Python 3
-python -m http.server 8000
-
-# Using Node.js http-server
-npx http-server
+php -S localhost:8000
 ```
 
 3. Open http://localhost:8000 in your browser
+
+If you are using XAMPP, place the project in your `htdocs` folder and open:
+`http://localhost/php-try/feet-fit/fit-to-feet/index.php`
 
 ### Backend Integration (Optional)
 For full backend functionality with database:
@@ -88,6 +87,7 @@ vercel
 ## 🛠️ Technologies Used
 
 - HTML5
+- PHP
 - CSS3
 - Bootstrap 5
 - JavaScript (ES6+)
@@ -96,9 +96,9 @@ vercel
 ## 📱 Navigation Links
 
 All pages have consistent navigation:
-- **Home** → `index.html`
-- **Shop** → `assets/shop.html`
-- **Contact** → `assets/contact.html`
+- **Home** → `index.php`
+- **Shop** → `assets/shop.php`
+- **Contact** → `assets/contact.php`
 
 ## 📝 Product Information
 

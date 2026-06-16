@@ -23,7 +23,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <!-- CSS -->
 
 <link rel="stylesheet"
-href="/assets/style.css">
+href="style.css">
 
 </head>
 
@@ -33,23 +33,23 @@ href="/assets/style.css">
 
 <nav>
 
-<a href="/index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="shop.html">Shop</a>
+<a href="shop.php">Shop</a>
 
-<a href="testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 

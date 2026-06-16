@@ -33,23 +33,23 @@ href="style.css">
 
 <nav>
 
-<a href="../index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="shop.html">Shop</a>
+<a href="shop.php">Shop</a>
 
-<a href="testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 
@@ -83,7 +83,7 @@ Train with professionals and achieve your goals faster.
 
 <div class="card-box text-center h-100">
 
-<img src="/assets\OIP (8).webp"
+<img src="OIP%20(8).webp"
 class="trainer-img mb-3"
 alt="Yoga">
 
@@ -121,7 +121,7 @@ Book Class
 
 <div class="card-box text-center h-100">
 
-<img src="/assets\trainer 4.webp"
+<img src="trainer%204.webp"
 class="trainer-img mb-3"
 alt="Boxing">
 
@@ -159,7 +159,7 @@ Book Class
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/oya.jpg"
+<img src="oya.jpg"
 class="trainer-img mb-3"
 alt="Cardio">
 
@@ -197,7 +197,7 @@ Book Class
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/trainer 3.jpg"
+<img src="trainer%203.jpg"
 class="trainer-img mb-3"
 alt="Crossfit">
 
@@ -235,7 +235,7 @@ Book Class
 
 <div class="card-box text-center h-100">
 
-<img src="/assets/zumba 2.png"
+<img src="zumba%202.png"
 class="trainer-img mb-3"
 alt="Zumba">
 
@@ -273,7 +273,7 @@ Book Class
 
 <div class="card-box text-center h-100">
 
-<img src="/assets\tire.jpg"
+<img src="tire.jpg"
 class="trainer-img mb-3"
 alt="Strength Training">
 

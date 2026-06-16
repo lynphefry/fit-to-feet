@@ -5,64 +5,131 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<?php
+// membership.php - show form on GET, handle POST and display confirmation
+$submitted = false;
+$errors = [];
+$name = $email = $phone = $password = $plan = '';
 
-<title>Membership | FEET TO FIT</title>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['memberName'] ?? '');
+    $email = trim($_POST['memberEmail'] ?? '');
+    $phone = trim($_POST['memberPhone'] ?? '');
+    $password = trim($_POST['memberPassword'] ?? '');
+    $plan = trim($_POST['memberPlan'] ?? '');
 
-<!-- Bootstrap -->
+    if ($name === '') $errors[] = 'Name is required.';
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
+    if ($phone === '') $errors[] = 'Phone is required.';
+    if ($password === '') $errors[] = 'Password is required.';
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
+    if (empty($errors)) {
+        $submitted = true;
+    }
+}
+?>
+<?php
+include 'db.php';
 
-<!-- CSS -->
+$result = mysqli_query($conn, "SELECT * FROM members");
 
-<link rel="stylesheet"
-href="style.css">
+while($row = mysqli_fetch_assoc($result)){
+    echo $row['first_name'] . " " . $row['last_name'] . "<br>";
+}
+?>
 
-<!-- QR CODE LIBRARY -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Membership | FEET TO FIT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <nav>
 
-<!-- NAVBAR -->
+<a href="../index.php">Home</a>
 
-<nav>
+<a href="trainers.php">Trainers</a>
 
-<a href="../index.html">Home</a>
+<a href="classes.php">Classes</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="classes.html">Classes</a>
+<a href="membership.php">Membership</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="shop.php">Shop</a>
 
-<a href="membership.html">Membership</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="shop.html">Shop</a>
+<a href="contact.php">Contact</a>
 
-<a href="contact.html">Contact</a>
-
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
+<div class="container mt-5">
+<?php if ($submitted): ?>
+    <div class="card p-4">
+        <h2 class="text-success">Registration Successful</h2>
+        <hr>
+        <p><strong>Name:</strong> <?php echo htmlspecialchars($name); ?></p>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+        <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
+        <p><strong>Plan:</strong> <?php echo htmlspecialchars($plan); ?></p>
+        <p><strong>Password:</strong> (hidden)</p>
+        <a href="membership.php" class="btn btn-primary">Register another</a>
+        <a href="../index.php" class="btn btn-link">Home</a>
+    </div>
+<?php else: ?>
+    <div class="card p-4">
+        <h2 class="mb-3">Join FEET TO FIT</h2>
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <?php foreach ($errors as $e): ?>
+                        <li><?php echo htmlspecialchars($e); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
 
-<!-- MEMBERSHIP SECTION -->
-
-<div class="container py-5">
-
-<h1 class="text-center mb-5">
-MEMBERSHIP PLANS
-</h1>
-
-<div class="row g-4">
-
-<!-- BASIC -->
-
-<div class="col-lg-4">
+        <form method="post" action="membership.php">
+            <div class="mb-3">
+                <label class="form-label">Full name</label>
+                <input name="memberName" class="form-control" value="<?php echo htmlspecialchars($name); ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input name="memberEmail" type="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input name="memberPhone" class="form-control" value="<?php echo htmlspecialchars($phone); ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input name="memberPassword" type="password" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Plan</label>
+                <select name="memberPlan" class="form-select">
+                    <option value="">Select a plan</option>
+                    <option value="monthly" <?php if ($plan==='monthly') echo 'selected'; ?>>Monthly</option>
+                    <option value="quarterly" <?php if ($plan==='quarterly') echo 'selected'; ?>>Quarterly</option>
+                    <option value="yearly" <?php if ($plan==='yearly') echo 'selected'; ?>>Yearly</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">Register</button>
+            <a href="../index.php" class="btn btn-link">Cancel</a>
+        </form>
+    </div>
+<?php endif; ?>
+</div>
+</body>
+</html>
+<div class="row-lg-4">
 
 <div class="card-box text-center">
 
@@ -97,11 +164,11 @@ Choose Plan
 
 </div>
 
-</div>
+</div> <br>
 
 <!-- PREMIUM -->
 
-<div class="col-lg-4">
+<div class="row-lg-4">
 
 <div class="card-box text-center">
 
@@ -136,11 +203,11 @@ Choose Plan
 
 </div>
 
-</div>
+</div> <br>
 
 <!-- VIP -->
 
-<div class="col-lg-4">
+<div class="row-lg-4">
 
 <div class="card-box text-center">
 
@@ -164,7 +231,7 @@ Elite Fitness Access
 
 <li>✔ Full Body Analysis</li>
 
-</ul>
+</ul> <br>
 
 <button class="btn-yellow mt-3"
 onclick="selectPlan('VIP Plan','8000')">
@@ -177,7 +244,7 @@ Choose Plan
 
 </div>
 
-</div>
+</div> <br>
 
 <!-- REGISTRATION -->
 
@@ -196,7 +263,7 @@ id="memberName"
 class="form-control"
 placeholder="Enter Full Name">
 
-</div>
+</div> <br>
 
 <div class="col-md-6 mb-3">
 

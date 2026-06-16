@@ -33,23 +33,23 @@ href="style.css">
 
 <nav>
 
-<a href="../index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="shop.html">Shop</a>
+<a href="shop.php">Shop</a>
 
-<a href="testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 
@@ -197,7 +197,7 @@ class="text-center mt-4"></p>
 Don't have an account?
 </p>
 
-<a href="membership.html"
+<a href="membership.php"
 class="text-success">
 
 Register Here
@@ -215,6 +215,27 @@ Register Here
 </div>
 
 </section>
+<?php
+include 'db.php';
+
+if(isset($_POST['submit'])){
+    $fname = $_POST['first_name'];
+    $lname = $_POST['last_name'];
+    $email = $_POST['email'];
+
+    $sql = "INSERT INTO members(first_name,last_name,email)
+            VALUES('$fname','$lname','$email')";
+
+    mysqli_query($conn, $sql);
+}
+?>
+
+<form method="POST">
+    <input type="text" name="first_name" placeholder="First Name">
+    <input type="text" name="last_name" placeholder="Last Name">
+    <input type="email" name="email" placeholder="Email">
+    <button type="submit" name="submit">Register</button>
+</form>
 
 <!-- SCRIPT -->
 

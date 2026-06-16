@@ -25,21 +25,21 @@
 
 <nav>
 
-<a href="../index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 

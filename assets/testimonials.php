@@ -11,7 +11,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -19,25 +19,25 @@
 
 <nav>
 
-<a href="/index.html">Home</a>
+<a href="../index.php">Home</a>
 
-<a href="/assets/trainers.html">Trainers</a>
+<a href="trainers.php">Trainers</a>
 
-<a href="/assets/classes.html">Classes</a>
+<a href="classes.php">Classes</a>
 
-<a href="/assets/schedule.html">Schedule</a>
+<a href="schedule.php">Schedule</a>
 
-<a href="/assets/membership.html">Membership</a>
+<a href="membership.php">Membership</a>
 
-<a href="/assets/testimonials.html">Testimonials</a>
+<a href="testimonials.php">Testimonials</a>
 
-<a href="/assets/contact.html">Contact</a>
+<a href="contact.php">Contact</a>
 
-<a href="/assets/login.html">Login</a>
+<a href="login.php">Login</a>
 
 </nav>
 
-<div class="container py-5">
+<div class="col-lg-4 col-md-6">
 
 <h1 class="text-center mb-5">
 TESTIMONIALS
@@ -50,7 +50,7 @@ TESTIMONIALS
 <div class="card-box">
 
 <h3>MERCY</h3>
-<img src="/assets\OIP (4).webp" alt="Mercy testimonial photo">
+<img src="OIP%20(4).webp" alt="Mercy testimonial photo">
 <p>
 Amazing trainers and modern equipment.
 </p>
@@ -64,7 +64,7 @@ Amazing trainers and modern equipment.
 <div class="card-box">
 
 <h3>JOAN</h3>
-<img src="/assets\OIP (16).webp" alt="Joan testimonial photo">
+<img src="OIP%20(16).webp" alt="Joan testimonial photo">
 <p>
 I lost weight and gained confidence.
 </p>
@@ -78,7 +78,7 @@ I lost weight and gained confidence.
 <div class="card-box">
 
 <h3>Kevin</h3>
-<img src="/assets\OIP (17).webp" alt="Kevin testimonial photo">
+<img src="OIP%20(17).webp" alt="Kevin testimonial photo">
 <p>
 Best gym experience ever.
 </p>
